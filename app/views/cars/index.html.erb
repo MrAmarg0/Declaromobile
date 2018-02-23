@@ -1,0 +1,14 @@
+<% @cars.each do |car|%>
+  <% begin %>
+  <p><%= car.name + ". "%></p>
+  <ul>
+    <li><%= "Средняя цена: " + car.average_price.to_s + " руб."%></li>
+    <% rich = Declaration.get_max_incoming_car_owner(car) %>
+    <% poor = Declaration.get_min_incoming_car_owner(car) %>
+    <li><%= "Самый богатый владелец: " + rich["main"]["person"]["name"] + " (доход + накопления => " + Declaration.get_total_incomes(rich).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
+    <li><%= "Самый бедный владелец: " + poor["main"]["person"]["name"] + " (доход + накопления => " + Declaration.get_total_incomes(poor).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
+  </ul>
+  <% rescue %>
+    </li></ul>
+  <% end %>
+<% end %>
