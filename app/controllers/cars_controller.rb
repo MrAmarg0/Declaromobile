@@ -1,6 +1,6 @@
 class CarsController < ActionController::Base
   def index
-    @cars = Carbrand.order_by(:count => 'desc').limit(10)
+    @cars = Carbrand.order_by(:count => 'desc').limit(9)
     render 'cars/index'
   end
 

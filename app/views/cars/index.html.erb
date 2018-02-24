@@ -1,4 +1,10 @@
 <%= stylesheet_link_tag "application" %>
+<div style="position: absolute">
+  <%= image_tag("declarator.png", alt: "nope", style: "width: 300px; height: 200px; margin-top: 80px; margin-left: 1200px;")%>
+</div>
+<div style="position: absolute">
+  <%= image_tag("top.png", alt: "nope", style: "width: 150px; height: 150px; margin-top: 13px;")%>
+</div>
 <div id="header">
   <a href="/" id="logo">Декларомобиль</a>
   <ul id="menu">
@@ -6,15 +12,17 @@
     <li><a href="/redflag"><span>Красный флаг</span></a></li>
   </ul>
 </div>
-<% @cars.each do |car|%>
-
-  <p><%=  link_to car["parent"]["name"] + " " + car.name + ". ", :controller => "cars", :action => 'show', :id => car.car_id %></p>
-  <ul>
-    <li><%= "Средняя цена: " + car.average_price.to_s + " руб."%></li>
-    <% rich = Declaration.get_max_incoming_car_owner(car) %>
-    <% poor = Declaration.get_min_incoming_car_owner(car) %>
-    <li><%= "Самый богатый владелец: " + rich["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(rich).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
-    <li><%= "Самый бедный владелец: " + poor["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(poor).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
-  </ul>
-
-<% end %>
+<div style="margin-left: 150px;">
+  <% @cars.each do |car|%>
+    <div style="width: 400px; display: inline-block;">
+      <p style="font-family: 'Squada One', cursive; font-size: 29px; text-align: center"><i class="arrow right"></i><%=  link_to car["parent"]["name"] + " " + car.name + " ", :controller => "cars", :action => 'show', :id => car.car_id %></p>
+      <ul style="font-family: 'Squada One'; font-size: 16px;">
+        <li><%= "Средняя цена: " + car.average_price.to_s + " руб."%></li>
+        <% rich = Declaration.get_max_incoming_car_owner(car) %>
+        <% poor = Declaration.get_min_incoming_car_owner(car) %>
+        <li><%= "Самый богатый владелец: " + rich["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(rich).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
+        <li><%= "Самый бедный владелец: " + poor["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(poor).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
+      </ul>
+    </div>
+  <% end %>
+</div>
