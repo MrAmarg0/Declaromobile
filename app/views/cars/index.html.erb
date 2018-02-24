@@ -1,14 +1,14 @@
+<div style="width: 100%;height: 30px; text-align: center"><%= link_to "Декларомобиль", root_path %></div>
 <% @cars.each do |car|%>
-  <% begin %>
-  <p><%= car.name + ". "%></p>
+
+  <p><%=  link_to car["parent"]["name"] + " " + car.name + ". ", :controller => "cars", :action => 'show', :id => car.car_id %></p>
   <ul>
     <li><%= "Средняя цена: " + car.average_price.to_s + " руб."%></li>
     <% rich = Declaration.get_max_incoming_car_owner(car) %>
     <% poor = Declaration.get_min_incoming_car_owner(car) %>
-    <li><%= "Самый богатый владелец: " + rich["main"]["person"]["name"] + " (доход + накопления => " + Declaration.get_total_incomes(rich).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
-    <li><%= "Самый бедный владелец: " + poor["main"]["person"]["name"] + " (доход + накопления => " + Declaration.get_total_incomes(poor).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
+    <li><%= "Самый богатый владелец: " + rich["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(rich).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
+    <li><%= "Самый бедный владелец: " + poor["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(poor).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
   </ul>
-  <% rescue %>
-    </li></ul>
-  <% end %>
+
+
 <% end %>
