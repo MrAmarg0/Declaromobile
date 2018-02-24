@@ -90,6 +90,7 @@ class Declaration
 
   def self.get_total_incomes(declaration)
     total_incomes = 0
+    return total_incomes if declaration["incomes"].nil?
     declaration["incomes"].each do |income|
       total_incomes += income["size"]
     end
@@ -110,7 +111,8 @@ class Declaration
     owner = nil
     Declaration.where("vehicles" => {"$elemMatch" => {"brand.id" => car.car_id}}, "main.year" => {"$gte" => 2016}).each do |dec|
       total_incomes = get_total_money(dec)
-      if (total_incomes < min_income && total_incomes > 0)
+      next if total_incomes == 0
+      if (total_incomes < min_income)
         min_income = total_incomes
         owner = dec
       end

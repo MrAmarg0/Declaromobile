@@ -1,4 +1,11 @@
-<div style="width: 100%;height: 30px; text-align: center"><%= link_to "Декларомобиль", root_path %></div>
+<%= stylesheet_link_tag "application" %>
+<div id="header">
+  <a href="/" id="logo">Декларомобиль</a>
+  <ul id="menu">
+    <li><a href="/"><span>Главная</span></a></li>
+    <li><a href="/redflag"><span>Красный флаг</span></a></li>
+  </ul>
+</div>
 <% @cars.each do |car|%>
 
   <p><%=  link_to car["parent"]["name"] + " " + car.name + ". ", :controller => "cars", :action => 'show', :id => car.car_id %></p>
@@ -9,6 +16,5 @@
     <li><%= "Самый богатый владелец: " + rich["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(rich).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
     <li><%= "Самый бедный владелец: " + poor["main"]["person"]["name"] + " (доход => " + Declaration.get_total_incomes(poor).to_i.to_s + " руб., соглсно декларации за " + rich["main"]["year"].to_s + ")"%></li>
   </ul>
-
 
 <% end %>

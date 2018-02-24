@@ -21,28 +21,38 @@ class CarsController < ActionController::Base
         "500000 - 1000000" => 0,
         ">1000000" =>  0
     }
-    Declaration.where("vehicles" => {"$elemMatch" => {"brand.id" => @car.car_id}}).each do |declaration|
-      incomes = Declaration.get_total_incomes(declaration)
+    Declaration.where("vehicles" => {"$elemMatch" => {"brand.id" => @car.car_id}}, "main.year" => {"$gte" => 2016}).each do |declaration|
+      incomes = Declaration.get_total_incomes(declaration).to_i
       next if incomes == 0
-      case incomes
-        when 0..100000
+      if (0..100000).member?(incomes)
           @chart_data["0 - 100000"] += 1
-        when 100000..200000
+      elsif (100000..200000).member?(incomes)
           @chart_data["100000 - 200000"] += 1
-        when 200000..300000
+      elsif (200000..300000).member?(incomes)
           @chart_data["200000 - 300000"] += 1
-        when 300000..400000
+      elsif (300000..400000).member?(incomes)
           @chart_data["300000 - 400000"] += 1
-        when 400000..500000
+      elsif (400000..500000).member?(incomes)
           @chart_data["400000 - 500000"] += 1
-        when 500000..1000000
+      elsif (500000..1000000).member?(incomes)
           @chart_data["500000 - 1000000"] += 1
-        when incomes > 1000000
+      elsif incomes > 1000000
           @chart_data[">1000000"] += 1
-        else
-          puts "Error charting"
+      else
+        puts "ERROR with " + Declaration["main"]["person"]["name"]
       end
     end
+    @poor_owner = Declaration.get_min_incoming_car_owner(@car)
+    @poor_income = Declaration.get_total_incomes(@poor_owner).to_i
+    @poor_year = @poor_owner["main.year"]
+    @rich_owner = Declaration.get_max_incoming_car_owner(@car)
+    @rich_income = Declaration.get_total_incomes(@rich_owner).to_i
+    @rich_year = @rich_owner["main.year"]
+    @average_price = @car["average_price"]
+    @min_price = @car["min_price"]
+    @max_price = @car["max_price"]
   end
-
+  def redflag
+    render json: Declaration.where("red_flag": true).any_of
+  end
 end
